@@ -16,7 +16,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles } from "@material-ui/core/styles";
-
+import { Link, withRouter, Route } from 'react-router-dom'
+import Verses from '../Verses';
 
 const drawerWidth = 240;
 
@@ -68,27 +69,42 @@ class DrawerLayout extends React.Component{
   render(){
     const { mobileOpen } = this.state;
     const { classes } = this.props;
+    console.log(this.props);
 
     const drawer = (
       <div>
           <div className={classes.toolbar} />
           <Divider />
-          <List>
+          {/* <List>
               {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
               <ListItem button key={text}>
                   <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                   <ListItemText primary={text} />
               </ListItem>
               ))}
-          </List>
-          <Divider />
+          </List> */}
+          
           <List>
-              {['All mail', 'Trash', 'Spam'].map((text, index) => (
-              <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
-              </ListItem>
-              ))}
+
+              {this.props.chapters.map((chapter) => {
+                const to = chapter.id;
+                const linkStyle = {
+                  display: 'flex',
+                  width: '100%',
+                  alignItems: 'center',
+                  textDecoration: 'none',
+                  color: 'inherit'
+                };
+                return(
+                  <ListItem button key = {chapter.id} to={to}>
+                    <Link to={'/'+chapter.id} style={linkStyle}>
+                      <ListItemIcon><InboxIcon /></ListItemIcon>
+                      <ListItemText primary={"fdsa"} />
+                    </Link>
+                  </ListItem>
+                )  
+              })}
+              
           </List>
       </div>
     );
@@ -143,12 +159,21 @@ class DrawerLayout extends React.Component{
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <Typography paragraph>
-                Lorem ipsum dolor sis et molestie ac.
-                </Typography>
-                <Typography paragraph>
-                Consequat mauris nunc c. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>
+                {/* <Route path={`${url}/:chapterId`} render={      
+                  props => {
+                    return <Verses {...props} chapterId = {props.match.params.chapterId}/>
+                  }
+                } /> */}
+
+                {/* <Route path='/:chapterId' render={      
+                  props => {
+                    // console.log(props);
+                    const chapterId = props.match.params.chapter;
+                    return <Verses {...props} {...chapterId} />
+                  }
+                } /> */}
+
+                <Route path="/:chapterId" component={Verses} />
             </main>
         </div>
     );
