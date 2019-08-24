@@ -99,7 +99,7 @@ class DrawerLayout extends React.Component{
                   <ListItem button key = {chapter.id} to={to}>
                     <Link to={'/'+chapter.id} style={linkStyle}>
                       <ListItemIcon><InboxIcon /></ListItemIcon>
-                      <ListItemText primary={"fdsa"} />
+                      <ListItemText primary={"chapter.name_simple"} />
                     </Link>
                   </ListItem>
                 )  
