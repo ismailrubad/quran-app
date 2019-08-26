@@ -59,7 +59,7 @@ const useStyles = theme => ({
 
 class DrawerLayout extends React.Component{
   state = {
-    mobileOpen: false
+    mobileOpen: false,
   }
 
   handleDrawerToggle = () => {
@@ -69,23 +69,12 @@ class DrawerLayout extends React.Component{
   render(){
     const { mobileOpen } = this.state;
     const { classes } = this.props;
-    console.log(this.props);
 
     const drawer = (
       <div>
           <div className={classes.toolbar} />
           <Divider />
-          {/* <List>
-              {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-              <ListItem button key={text}>
-                  <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                  <ListItemText primary={text} />
-              </ListItem>
-              ))}
-          </List> */}
-          
           <List>
-
               {this.props.chapters.map((chapter) => {
                 const to = chapter.id;
                 const linkStyle = {
@@ -95,11 +84,12 @@ class DrawerLayout extends React.Component{
                   textDecoration: 'none',
                   color: 'inherit'
                 };
+                // console.log(chapter);
                 return(
                   <ListItem button key = {chapter.id} to={to}>
                     <Link to={'/'+chapter.id} style={linkStyle}>
                       <ListItemIcon><InboxIcon /></ListItemIcon>
-                      <ListItemText primary={"chapter.name_simple"} />
+                      <ListItemText primary={chapter.name_simple} />
                     </Link>
                   </ListItem>
                 )  
@@ -124,7 +114,7 @@ class DrawerLayout extends React.Component{
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap>
-                    Responsive drawer
+                    {/* {this.state.currentChapter.name_complex} */} Bar
                 </Typography>
                 </Toolbar>
             </AppBar>
@@ -159,21 +149,28 @@ class DrawerLayout extends React.Component{
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                {/* <Route path={`${url}/:chapterId`} render={      
+                <Route path="/:chapterId" render={
                   props => {
-                    return <Verses {...props} chapterId = {props.match.params.chapterId}/>
-                  }
-                } /> */}
+                    const chapterId = props.match.params.chapterId;
+                    // var c = {};
+                    
+                    // this.props.chapters.map(chapter => {
+                    //   if(chapter.id == chapterId){
+                    //     c = chapter;
+                    //     if(chapterId != this.state.currentChapter.id){
+                    //       this.setState({currentChapter:c});
+                    //     }
+                    //     return
+                    //   }
+                    // })
 
-                {/* <Route path='/:chapterId' render={      
-                  props => {
-                    // console.log(props);
-                    const chapterId = props.match.params.chapter;
-                    return <Verses {...props} {...chapterId} />
-                  }
-                } /> */}
+                    const currentChapter = this.props.chapters.find(({ id }) => id == props.match.params.chapterId)
 
-                <Route path="/:chapterId" component={Verses} />
+
+                    // this.changeCurrentSura(chapterId);
+                    return <Verses {...props} {...currentChapter} />
+                  }
+                } />
             </main>
         </div>
     );
