@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
@@ -18,6 +19,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import { Link, withRouter, Route } from 'react-router-dom'
 import Verses from '../Verses';
+import '../../../src/App.css';
 
 const drawerWidth = 240;
 
@@ -59,7 +61,7 @@ const useStyles = theme => ({
 
 class DrawerLayout extends React.Component{
   state = {
-    mobileOpen: false,
+    mobileOpen: false, chapterId: null
   }
 
   handleDrawerToggle = () => {
@@ -69,7 +71,7 @@ class DrawerLayout extends React.Component{
   render(){
     const { mobileOpen } = this.state;
     const { classes } = this.props;
-
+    console.log(this.props);
     const drawer = (
       <div>
           <div className={classes.toolbar} />
@@ -78,20 +80,22 @@ class DrawerLayout extends React.Component{
               {this.props.chapters.map((chapter) => {
                 const to = chapter.id;
                 const linkStyle = {
-                  display: 'flex',
-                  width: '100%',
-                  alignItems: 'center',
+                  // display: 'flex',
+                  // width: '100%',
+                  // alignItems: 'center',
                   textDecoration: 'none',
                   color: 'inherit'
                 };
                 // console.log(chapter);
                 return(
-                  <ListItem button key = {chapter.id} to={to}>
-                    <Link to={'/'+chapter.id} style={linkStyle}>
-                      <ListItemIcon><InboxIcon /></ListItemIcon>
-                      <ListItemText primary={chapter.name_simple} />
-                    </Link>
-                  </ListItem>
+                  <Link to={'/'+chapter.id} style={linkStyle} key = {chapter.id}>
+                    <ListItem button selected = {this.state.chapterId == to}>
+                        <ListItemText primary={chapter.name_simple+" "+chapter.chapter_number}/>
+                        <ListItemSecondaryAction>{chapter.name_arabic}</ListItemSecondaryAction>
+                    </ListItem>
+                  </Link>
+                  
+
                 )  
               })}
               
@@ -152,8 +156,10 @@ class DrawerLayout extends React.Component{
                 <Route path="/:chapterId" render={
                   props => {
                     const chapterId = props.match.params.chapterId;
-                    // var c = {};
                     
+                    if(this.state.chapterId != chapterId)
+                      this.setState({chapterId});
+                    // var c = {};
                     // this.props.chapters.map(chapter => {
                     //   if(chapter.id == chapterId){
                     //     c = chapter;
