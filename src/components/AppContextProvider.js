@@ -1,16 +1,16 @@
 import React from 'react';
 
 // first we will make a new context
-export const MyContext = React.createContext();
+export const AppContext = React.createContext();
 
 // Then create a provider Component
-export class MyProvider extends React.Component {
+export class AppProvider extends React.Component {
     state = {
         currentChapter: {}
     }
     render() {
         return (
-            <MyContext.Provider 
+            <AppContext.Provider 
                 value= {{
                     state: this.state, 
                     changeCurrentChapter: (currentChapter) => {
@@ -25,7 +25,7 @@ export class MyProvider extends React.Component {
                      
                     {this.props.children}
 
-            </MyContext.Provider>
+            </AppContext.Provider>
         )
     }
 }

@@ -1,27 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import IconButton from '@material-ui/core/IconButton';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import {AppBar, CssBaseline, Divider, Hidden, Drawer, IconButton, 
+        List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography,
+        ListItemAvatar, Avatar} 
+        from '@material-ui/core';
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import { Link, withRouter, Route } from 'react-router-dom'
+import MenuIcon from '@material-ui/icons/Menu';
 import Verses from '../Verses';
 import '../../../src/App.css';
+import {AppContext} from '../AppContextProvider';
 
-const drawerWidth = 240;
+const drawerWidth = 320;
 
 
 const useStyles = theme => ({
@@ -90,8 +80,13 @@ class DrawerLayout extends React.Component{
                 return(
                   <Link to={'/'+chapter.id} style={linkStyle} key = {chapter.id}>
                     <ListItem button selected = {this.state.chapterId == to}>
-                        <ListItemText primary={chapter.name_simple+" "+chapter.chapter_number}/>
-                        <ListItemSecondaryAction>{chapter.name_arabic}</ListItemSecondaryAction>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <Typography variant="subtitle2">{chapter.chapter_number}</Typography>
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary={chapter.name_simple} secondary={chapter.translated_name.name}/>
+                      <ListItemSecondaryAction><Typography variant="h6"> {chapter.name_arabic} </Typography> </ListItemSecondaryAction>
                     </ListItem>
                   </Link>
                   
@@ -118,11 +113,17 @@ class DrawerLayout extends React.Component{
                     <MenuIcon />
                 </IconButton>
                 <Typography variant="h6" noWrap>
-                    {/* {this.state.currentChapter.name_complex} */} Bar
+                    <AppContext.Consumer>
+                      {(context) => (
+                        <React.Fragment>
+                            {context.state.currentChapter.name_complex}
+                        </React.Fragment>
+                      )}
+                  </AppContext.Consumer>
                 </Typography>
                 </Toolbar>
             </AppBar>
-            <nav className={classes.drawer} aria-label="mailbox folders">
+            <nav className={classes.drawer+" "+ "chapters-nav"} aria-label="mailbox folders">
                 {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                 <Hidden smUp implementation="css">
                 <Drawer

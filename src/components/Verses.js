@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
-import {MyContext} from './AppContextProvider';
+import {AppContext} from './AppContextProvider';
+import { Typography } from '@material-ui/core';
 
 export default class extends React.Component {
 
@@ -39,13 +40,12 @@ export default class extends React.Component {
     }
 
     renderVerse(){
-
         return this.state.verses.map(verse => {
             return(
-                <div key={verse.id}>
-                    <div>
-                        <span className="verse_key">{verse.verse_key}</span>
-                        <span className="arabic_text">{verse.text_madani}</span>
+                <div key={verse.id} className="verse">
+                    <div className="overflowAuto">
+                        <Typography variant="h5" className="verse_key">{verse.verse_key}</Typography>
+                        <Typography variant="h5" className="arabic_text">{verse.text_madani}</Typography>
                     </div>
                     <div>
                         <p className="translation_resource_name">{verse.translations[0].resource_name}</p>
@@ -65,24 +65,20 @@ export default class extends React.Component {
 
         return(
             <div>
-                <MyContext.Consumer>
+                <AppContext.Consumer>
                     {(context) => (
                         <React.Fragment>
-                            {context.state.currentChapter.name_complex}
-                            {   console.log(context.age)}
                             {
                                 context.changeCurrentChapter({
                                     name_complex: this.props.name_complex,
                                     name_arabic: this.props.name_arabic,
-                                    chapter_number: this.props.chapter_number
+                                    chapter_number: this.props.chapter_number,
+                                    revelation_place: this.props.revelation_place
                                 })
                             }
                         </React.Fragment>
                     )}
-                </MyContext.Consumer>
-                <br/>
-                <br/>
-                <br/>
+                </AppContext.Consumer>
                 {this.renderVerse()}
             </div>
         )

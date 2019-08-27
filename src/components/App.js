@@ -2,7 +2,7 @@ import React from 'react';
 import DrawerLayout from './DrawerLayout';
 import axios from 'axios';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import {MyProvider} from './AppContextProvider';
+import {AppProvider} from './AppContextProvider';
 
 class App extends React.Component {
     
@@ -22,13 +22,13 @@ class App extends React.Component {
     render(){
 
         return(
-            <MyProvider>
+            <AppProvider>
                 <div id="app-wrapper" >
                     <BrowserRouter>
                         <DrawerLayout chapters = {this.state.chapters} />
                     </BrowserRouter>
                 </div>
-            </MyProvider>
+            </AppProvider>
         )
     }
 }
