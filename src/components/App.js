@@ -1,8 +1,25 @@
 import React from 'react';
 import DrawerLayout from './DrawerLayout';
 import axios from 'axios';
+import { ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import purple from '@material-ui/core/colors/purple';
+import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import {AppProvider} from './AppContextProvider';
+import { StylesProvider } from '@material-ui/styles'
+
+const theme = createMuiTheme({
+    palette: {
+      primary: {
+          main: '#1948bc',
+      },
+      secondary: green,
+    },
+    status: {
+      danger: 'orange',
+    },
+});
 
 class App extends React.Component {
     
@@ -23,11 +40,15 @@ class App extends React.Component {
 
         return(
             <AppProvider>
-                <div id="app-wrapper" >
-                    <BrowserRouter>
-                        <DrawerLayout chapters = {this.state.chapters} />
-                    </BrowserRouter>
-                </div>
+                <ThemeProvider theme={theme}>
+                    <StylesProvider injectFirst>
+                        <div id="app-wrapper" >
+                            <BrowserRouter>
+                                <DrawerLayout chapters = {this.state.chapters} />
+                            </BrowserRouter>
+                        </div>
+                    </StylesProvider>
+                </ThemeProvider>
             </AppProvider>
         )
     }
