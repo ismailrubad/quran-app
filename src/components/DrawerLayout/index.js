@@ -65,8 +65,9 @@ class DrawerLayout extends React.Component{
     const drawer = (
       <div>
           <div className={classes.toolbar} />
+          <h2>QURAN</h2>
           <Divider />
-          <List>
+          <List className="chapterList">
               {this.props.chapters.map((chapter) => {
                 const to = chapter.id;
                 const linkStyle = {
@@ -85,7 +86,7 @@ class DrawerLayout extends React.Component{
                           <Typography variant="subtitle2">{chapter.chapter_number}</Typography>
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={chapter.name_simple} secondary={chapter.translated_name.name}/>
+                      <ListItemText className = "name_simple" primary={chapter.name_simple} secondary={chapter.translated_name.name}/>
                       <ListItemSecondaryAction><Typography variant="h6"> {chapter.name_arabic} </Typography> </ListItemSecondaryAction>
                     </ListItem>
                   </Link>

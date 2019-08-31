@@ -1,33 +1,42 @@
+@font-face {
+	font-family: Kalpurush;
+    src: url(../src/assets/fonts/kalpurush.ttf);
+}
+
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap');
+
 body{
     background-color: #f2f4f8;
 }
+
 
 .overflowAuto{overflow: auto;}
 
 .MuiAppBar-colorPrimary{
     background-color: #ffffff;
     color: #1948bc;
+    box-shadow: 0px 0px 40px 0px rgba(82, 63, 105, 0.1);
 }
 
 .chapters-nav .MuiPaper-root{
-    background-color: #1948bc;
+    background-color: #506ee4;
     color: #ffffff;
 }
 
 .chapters-nav .MuiPaper-root::-webkit-scrollbar-track
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
+	background-color: #506ee4;
 }
 .chapters-nav .MuiPaper-root::-webkit-scrollbar
 {
 	width: 6px;
-	background-color: #F5F5F5;
+	background-color: #506ee4;
 }
 
 .chapters-nav .MuiPaper-root::-webkit-scrollbar-thumb
 {
-	background-color: #000000;
+	background-color: rgba(255, 255, 255, 0.5);
 }
 
 .chapters-nav .MuiTypography-colorTextSecondary{
@@ -38,8 +47,13 @@ body{
     background-color: rgba(0, 0, 0, 0.14);
 }
 
+.chapterList .name_simple .MuiTypography-body1{
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
 .verse{
-    border-radius: 6px;
+    border-radius: 3px;
     background-color: #fff;
     -webkit-box-shadow: 0px 2px 4px rgba(126,142,177,0.12);
     box-shadow: 0px 2px 4px rgba(126,142,177,0.12);
@@ -49,11 +63,13 @@ body{
 
 .verse .arabic_text{
     text-align: right;
-    font-size: 30px;
+    font-size: 45px;
 }
 
 .verse .verse_key{
     font-size: 20px;
+    color: #5d78ff;
+    font-family: 'Roboto', sans-serif;
 }
 
 .verse .translation{
@@ -61,7 +77,9 @@ body{
 }
 
 .verse .translation .translation_text{
-    margin-top: 5px;
+    margin-top: 3px;
+    font-family: Kalpurush;
+    font-size: 26px;
 }
 
 .verse-top-part,.translation{
@@ -70,4 +88,9 @@ body{
 
 .arabic_text{
     margin-bottom: 30px;
+}
+
+.translation_resource_name {
+    text-transform: capitalize;
+    opacity: .5;
 }
