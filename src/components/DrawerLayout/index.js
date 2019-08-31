@@ -64,8 +64,9 @@ class DrawerLayout extends React.Component{
     console.log(this.props);
     const drawer = (
       <div>
-          <div className={classes.toolbar} />
-          <h2>QURAN</h2>
+          <div className={classes.toolbar}>
+            <h2>AL - QURAN</h2>
+          </div>
           <Divider />
           <List className="chapterList">
               {this.props.chapters.map((chapter) => {

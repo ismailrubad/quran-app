@@ -81,6 +81,7 @@ export default class extends React.Component {
                     )}
                 </AppContext.Consumer>
                 {this.renderVerse()}
+                
             </div>
         )
     }
