@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {AppBar, CssBaseline, Divider, Hidden, Drawer, IconButton, 
         List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography,
-        ListItemAvatar, Avatar} 
+        ListItemAvatar, Avatar, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary} 
         from '@material-ui/core';
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import { Link, withRouter, Route } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 import Verses from '../Verses';
 import '../../../src/App.css';
 import {AppContext} from '../AppContextProvider';
@@ -25,10 +27,11 @@ const useStyles = theme => ({
     },
   },
   appBar: {
-    marginLeft: drawerWidth,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-    },
+    // marginLeft: drawerWidth,
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth * 2}px)`,
+      left: drawerWidth
+    }
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -41,8 +44,11 @@ const useStyles = theme => ({
     width: drawerWidth,
   },
   content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
+    // flexGrow: 1,
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth * 2}px)`
+    },
+    padding: theme.spacing(3)
   },
 });
 
@@ -51,12 +57,17 @@ const useStyles = theme => ({
 
 class DrawerLayout extends React.Component{
   state = {
-    mobileOpen: false, chapterId: null
+    mobileOpen: false, chapterId: null, expanded: false
   }
+
 
   handleDrawerToggle = () => {
     this.setState({ mobileOpen: !this.state.mobileOpen })
   }
+
+  handleChange = panel => (event, isExpanded) => {
+    this.setState({expanded: isExpanded ? panel : false});
+  };
 
   render(){
     const { mobileOpen } = this.state;
@@ -100,11 +111,56 @@ class DrawerLayout extends React.Component{
       </div>
     );
 
+    const drawerSettings = (
+      <div>
+          <div className={classes.toolbar} style = {{backgroundColor: '#f8f8f8'}} >
+            <h2 style={{color: '#ccc'}}>SETTINGS</h2>
+          </div>
+          <Divider />
+          <div style={{marginTop: '60px'}}>
+            <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1bh-content"
+                id="panel1bh-header"
+              >
+                <Typography className={classes.heading}>General settings</Typography>
+                {/* <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography> */}
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Typography>
+                  Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
+                  maximus est, id dignissim quam.
+                </Typography>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+            <ExpansionPanel expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2bh-content"
+                id="panel2bh-header"
+              >
+                <Typography className={classes.heading}>Users</Typography>
+                {/* <Typography className={classes.secondaryHeading}>
+                  You are currently not an owner
+                </Typography> */}
+              </ExpansionPanelSummary>
+              <ExpansionPanelDetails>
+                <Typography>
+                  Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
+                  diam eros in elit. Pellentesque convallis laoreet laoreet.
+                </Typography>
+              </ExpansionPanelDetails>
+            </ExpansionPanel>
+          </div>
+      </div>
+    );
+
     return (
         <div className={classes.root}>
             <CssBaseline />
             <AppBar position="fixed" className={classes.appBar}>
-                <Toolbar>
+                <Toolbar style={{ justifyContent: "space-between" }}>
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
@@ -123,6 +179,16 @@ class DrawerLayout extends React.Component{
                       )}
                   </AppContext.Consumer>
                 </Typography>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  // onClick={handleDrawerToggle}
+                  className={classes.menuButton}
+                  style={{ marginRight: "-12px" }}
+                >
+                  <MenuIcon />
+                </IconButton>
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer+" "+ "chapters-nav"} aria-label="mailbox folders">
@@ -153,9 +219,39 @@ class DrawerLayout extends React.Component{
                     {drawer}
                 </Drawer>
                 </Hidden>
+
+                <Hidden smUp implementation="css">
+                  <Drawer
+                    // container={container}
+                    variant="temporary"
+                    anchor="right"
+                    open={mobileOpen}
+                    // onClose={handleDrawerToggle}
+                    classes={{
+                      paper: classes.drawerPaper
+                    }}
+                    ModalProps={{
+                      keepMounted: true // Better open performance on mobile.
+                    }}
+                  >
+                    {drawerSettings}
+                  </Drawer>
+                </Hidden>
+                <Hidden xsDown implementation="css">
+                  <Drawer
+                    classes={{
+                      paper: classes.drawerPaper
+                    }}
+                    variant="permanent"
+                    open
+                    anchor="right"
+                  >
+                    {drawerSettings}
+                  </Drawer>
+                </Hidden>
             </nav>
             <main className={classes.content}>
-                <div className={classes.toolbar} />
+                {/* <div className={classes.toolbar} /> */}
                 <Route path="/:chapterId" render={
                   props => {
                     const chapterId = props.match.params.chapterId;
