@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {AppBar, CssBaseline, Divider, Hidden, Drawer, IconButton, 
         List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography,
-        ListItemAvatar, Avatar, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary} 
+        ListItemAvatar, Avatar, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary,
+        Checkbox, Select, MenuItem} 
         from '@material-ui/core';
-import { withStyles, createStyles } from "@material-ui/core/styles";
+
+import Slider from "@material-ui/core/Slider";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import { Link, withRouter, Route } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -30,8 +33,8 @@ const useStyles = theme => ({
     // marginLeft: drawerWidth,
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth * 2}px)`,
-      left: drawerWidth
-    }
+      left: drawerWidth,
+    },
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -48,16 +51,47 @@ const useStyles = theme => ({
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth * 2}px)`
     },
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    marginTop: '64px'
+
   },
 });
 
-
+const PrettoSlider = withStyles({
+  root: {
+    color: "#52af77",
+    height: 8
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: "#fff",
+    border: "2px solid currentColor",
+    marginTop: -8,
+    marginLeft: -12,
+    "&:focus,&:hover,&$active": {
+      boxShadow: "inherit"
+    }
+  },
+  active: {},
+  valueLabel: {
+    left: "calc(-50% + 4px)"
+  },
+  track: {
+    height: 8,
+    borderRadius: 4
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4
+  }
+})(Slider);
 
 
 class DrawerLayout extends React.Component{
   state = {
-    mobileOpen: false, chapterId: null, expanded: false
+    mobileOpen: false, chapterId: null, expanded: 'panel1', 
+    arabicFont: 10, openArabicFont: false
   }
 
 
@@ -68,6 +102,28 @@ class DrawerLayout extends React.Component{
   handleChange = panel => (event, isExpanded) => {
     this.setState({expanded: isExpanded ? panel : false});
   };
+
+  handleChangeArabicFont = event => {
+    this.setState({
+      arabicFont: event.target.value
+    })
+  }
+
+  handleCloseArabicFont = () => {
+    this.setState({
+      openArabicFont: false
+    })
+  }
+
+  handleOpenArabicFont = () => {
+    this.setState({
+      openArabicFont: true
+    })
+  }
+  
+  handleChangeFontSize = (event, value) => {
+    console.log(value);
+  }
 
   render(){
     const { mobileOpen } = this.state;
@@ -112,12 +168,12 @@ class DrawerLayout extends React.Component{
     );
 
     const drawerSettings = (
-      <div>
+      <div className="drawerSettings">
           <div className={classes.toolbar} style = {{backgroundColor: '#f8f8f8'}} >
             <h2 style={{color: '#ccc'}}>SETTINGS</h2>
           </div>
           <Divider />
-          <div style={{marginTop: '60px'}}>
+          <div style={{marginTop: '60px', padding: '16px 16px'}}>
             <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
               <ExpansionPanelSummary
                 expandIcon={<ExpandMoreIcon />}
@@ -128,10 +184,54 @@ class DrawerLayout extends React.Component{
                 {/* <Typography className={classes.secondaryHeading}>I am an expansion panel</Typography> */}
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <Typography>
-                  Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat. Aliquam eget
-                  maximus est, id dignissim quam.
-                </Typography>
+              <List style={{width: '100%'}}>
+                  <ListItem style = {{paddingLeft: 0}}>
+                    <ListItemText  primary={"Arabic Font"} />
+                    <ListItemSecondaryAction style={{right: 0}}>
+                      <Select
+                        open={this.state.openArabicFont}
+                        onClose={this.handleCloseArabicFont}
+                        onOpen={this.handleOpenArabicFont}
+                        value={this.state.arabicFont}
+                        onChange={this.handleChangeArabicFont}
+                        inputProps={{
+                          name: 'age',
+                          id: 'demo-controlled-open-select',
+                        }}
+                      >
+                        <MenuItem value={10}>Al Qalam</MenuItem>
+                        <MenuItem value={20}>Me Quran</MenuItem>
+                        <MenuItem value={30}>Scheherazade</MenuItem>
+                      </Select>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                  <ListItem style={{paddingLeft: 0, paddingRight: 0}}>
+
+                    <AppContext.Consumer>
+                        {(context) => (
+                            <React.Fragment>
+                                { 
+                                  <ListItemText primary="Arabic Font Size" 
+                                    secondary={
+                                      <React.Fragment>
+                                        <PrettoSlider
+                                          valueLabelDisplay="auto"
+                                          aria-label="pretto slider"
+                                          defaultValue={context.state.arabicFontSize}
+                                          max={70}
+                                          onChange={context.changeArabicFontSize}
+                                        />
+                                      </React.Fragment>
+                                    } />
+                                }
+                            </React.Fragment>
+                        )}
+                    </AppContext.Consumer>
+
+                    
+                    
+                  </ListItem>
+                </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>
             <ExpansionPanel expanded={this.state.expanded === 'panel2'} onChange={this.handleChange('panel2')}>
@@ -146,10 +246,19 @@ class DrawerLayout extends React.Component{
                 </Typography> */}
               </ExpansionPanelSummary>
               <ExpansionPanelDetails>
-                <Typography>
-                  Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus, varius pulvinar
-                  diam eros in elit. Pellentesque convallis laoreet laoreet.
-                </Typography>
+                <List>
+                  <ListItem button>
+                    <ListItemText  primary={"Arabic Font"} />
+                    <ListItemSecondaryAction>
+                      <Checkbox
+                        edge="end"
+                        // onChange={handleToggle(value)}
+                        // checked={checked.indexOf(value) !== -1}
+                        // inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                </List>
               </ExpansionPanelDetails>
             </ExpansionPanel>
           </div>

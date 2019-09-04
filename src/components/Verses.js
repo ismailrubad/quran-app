@@ -47,7 +47,15 @@ export default class extends React.Component {
                     <div className="verse-top-part">
                         <span className="verse_key">{verse.verse_key}</span>
                     </div>
-                    <Typography variant="h5" className="arabic_text">{verse.text_madani} <img width = "20" src = {bullet} ></img></Typography>
+                    <AppContext.Consumer>
+                        {(context) => (
+                            <React.Fragment>
+                                {
+                                    <Typography style={{fontSize: `${context.state.arabicFontSize}px`}} variant="h5" className="arabic_text">{verse.text_madani} <img width = "20" src = {bullet} ></img></Typography>
+                                }
+                            </React.Fragment>
+                        )}
+                    </AppContext.Consumer>
                     <div className="translation">
                         <span className="translation_resource_name">{verse.translations[0].resource_name}</span>
                         <p className="translation_text">{verse.translations[0].text}</p>

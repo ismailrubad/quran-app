@@ -6,7 +6,8 @@ export const MyContext = React.createContext();
 // Then create a provider Component
 export class MyProvider extends React.Component {
     state = {
-        currentChapter: {}
+        currentChapter: {},
+        arabicFontSize: 40
     }
     render() {
         return (
@@ -20,6 +21,11 @@ export class MyProvider extends React.Component {
                                 currentChapter
                             })
                         }
+                    },
+                    changeArabicFontSize: (event, value) => {
+                        this.setState({
+                            arabicFontSize: value
+                        })
                     }
                 }}>
                      

@@ -24,8 +24,9 @@ body{
 }
 
 .chapters-nav .MuiDrawer-paperAnchorDockedRight{
-    background-color: #f8f8f8;
+    background-color: #f2f4f8;
     color: #ffffff;
+    border-left: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .chapters-nav .MuiPaper-root::-webkit-scrollbar-track
@@ -113,4 +114,16 @@ body{
 .translation_resource_name {
     text-transform: capitalize;
     opacity: .5;
+}
+
+.drawerSettings .MuiPaper-elevation1{
+    box-shadow: 0px 2px 4px rgba(126,142,177,0.12);
+}
+
+.drawerSettings .MuiExpansionPanelDetails-root{
+    padding: 0 24px;
+}
+
+.drawerSettings .MuiExpansionPanelSummary-root.Mui-expanded{
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
