@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import axios from 'axios';
-import {AppContext} from './AppContextProvider';
-import { Typography } from '@material-ui/core';
+import { AppContext } from './AppContextProvider';
+import { Typography, Button, CircularProgress } from '@material-ui/core';
 import bullet from '../../src/assets/img/bullet.svg'
 import { bool } from 'prop-types';
 export default class extends React.Component {
@@ -10,20 +10,21 @@ export default class extends React.Component {
         chapterId: null,
         verses: [],
         next_page: 1,
-        max_limit: 20
+        max_limit: 20,
+        fetching: true
     }
 
-    fetchVerses(chapterId, loadMore){
+    fetchVerses(chapterId, loadMore) {
 
-        if(chapterId !== this.state.chapterId || loadMore){
+        if (chapterId !== this.state.chapterId || loadMore) {
 
             const next_page = (chapterId !== this.state.chapterId) ? 1 : this.state.next_page;
 
-            if (next_page !== null){
+            if (next_page !== null) {
                 axios.get(`http://staging.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=24&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
                     .then(res => {
                         // console.log(res.data);
-                        const verses = loadMore ? [ ...this.state.verses , ...res.data.verses] : [...res.data.verses];
+                        const verses = loadMore ? [...this.state.verses, ...res.data.verses] : [...res.data.verses];
                         // console.log(verses);
                         const next_page = res.data.meta.next_page;
 
@@ -32,7 +33,8 @@ export default class extends React.Component {
                         this.setState({
                             verses,
                             chapterId,
-                            next_page
+                            next_page,
+                            fetching: false
                         })
                     })
             }
@@ -40,9 +42,9 @@ export default class extends React.Component {
 
     }
 
-    renderVerse(){
+    renderVerse() {
         return this.state.verses.map(verse => {
-            return(
+            return (
                 <div key={verse.id} className="verse">
                     <div className="verse-top-part">
                         <span className="verse_key">{verse.verse_key}</span>
@@ -51,7 +53,7 @@ export default class extends React.Component {
                         {(context) => (
                             <React.Fragment>
                                 {
-                                    <Typography style={{fontSize: `${context.state.arabicFontSize}px`}} variant="h5" className="arabic_text">{verse.text_madani} <img width = "20" src = {bullet} ></img></Typography>
+                                    <Typography style={{ fontSize: `${context.state.arabicFontSize}px` }} variant="h5" className="arabic_text">{verse.text_madani} <img width="20" src={bullet} ></img></Typography>
                                 }
                             </React.Fragment>
                         )}
@@ -63,16 +65,33 @@ export default class extends React.Component {
                 </div>
             )
         })
-        
+
+    }
+
+    renderLoadMore (chapterId) {
+        if(!this.state.fetching){
+            return(
+                <Button onClick={() => {this.fetchVerses(chapterId, true); 
+                    this.setState({fetching: true})
+                    }} variant="contained" color="primary" >
+                    Load More
+                </Button>
+            )
+        }
+        else{
+            return(
+                <CircularProgress  />
+            )
+        }
     }
 
 
     render() {
-        const {match} = this.props;
+        const { match } = this.props;
 
         this.fetchVerses(match.params.chapterId, false);
 
-        return(
+        return (
             <div>
                 <AppContext.Consumer>
                     {(context) => (
@@ -89,7 +108,9 @@ export default class extends React.Component {
                     )}
                 </AppContext.Consumer>
                 {this.renderVerse()}
-                
+                <div style={{ textAlign: 'center' }}>
+                    {this.renderLoadMore(match.params.chapterId)}
+                </div>
             </div>
         )
     }
