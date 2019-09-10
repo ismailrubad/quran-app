@@ -7,7 +7,8 @@ export const AppContext = React.createContext();
 export class AppProvider extends React.Component {
     state = {
         currentChapter: {},
-        arabicFontSize: 45
+        arabicFontSize: 45,
+        translationId: 24
     }
     render() {
         return (
@@ -26,6 +27,9 @@ export class AppProvider extends React.Component {
                         this.setState({
                             arabicFontSize: value
                         })
+                    },
+                    changeTranslation: (translationId) => {
+                        this.setState({translationId})
                     }
                 }}>
                      
