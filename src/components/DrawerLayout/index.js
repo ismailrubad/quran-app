@@ -4,8 +4,8 @@ import {
   AppBar, CssBaseline, Divider, Hidden, Drawer, IconButton,
   List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography,
   ListItemAvatar, Avatar, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary,
-   MenuItem, FormLabel, FormControlLabel, Radio, RadioGroup, Select, FormControl
-  
+  MenuItem, FormLabel, FormControlLabel, Radio, RadioGroup, Select, FormControl
+
 }
   from '@material-ui/core';
 
@@ -235,9 +235,28 @@ class DrawerLayout extends React.Component {
                       </React.Fragment>
                     )}
                   </AppContext.Consumer>
-
-
-
+                </ListItem>
+                <ListItem style={{ paddingLeft: 0, paddingRight: 0 }}>
+                  <AppContext.Consumer>
+                    {(context) => (
+                      <React.Fragment>
+                        {
+                          <ListItemText primary="Other Font Size"
+                            secondary={
+                              <React.Fragment>
+                                <PrettoSlider
+                                  valueLabelDisplay="auto"
+                                  aria-label="pretto slider"
+                                  defaultValue={context.state.otherFontSize}
+                                  max={70}
+                                  onChange={context.changeOtherFontSize}
+                                />
+                              </React.Fragment>
+                            } />
+                        }
+                      </React.Fragment>
+                    )}
+                  </AppContext.Consumer>
                 </ListItem>
               </List>
             </ExpansionPanelDetails>
@@ -267,6 +286,18 @@ class DrawerLayout extends React.Component {
                   <FormControlLabel value="18" control={<Radio />} label="English - Muhsin Khan" />
                 </RadioGroup>
               </FormControl>
+            </ExpansionPanelDetails>
+          </ExpansionPanel>
+          <ExpansionPanel expanded={this.state.expanded === 'panel3'} onChange={this.handleChange('panel3')}>
+            <ExpansionPanelSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel2bh-content"
+              id="panel2bh-header"
+            >
+              <Typography className={classes.heading}>Audio Settings</Typography>
+            </ExpansionPanelSummary>
+            <ExpansionPanelDetails>
+              <p>Audio settings</p>
             </ExpansionPanelDetails>
           </ExpansionPanel>
         </div>

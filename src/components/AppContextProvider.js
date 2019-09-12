@@ -8,6 +8,7 @@ export class AppProvider extends React.Component {
     state = {
         currentChapter: {},
         arabicFontSize: 45,
+        otherFontSize: 26,
         translationId: 24
     }
     render() {
@@ -26,6 +27,11 @@ export class AppProvider extends React.Component {
                     changeArabicFontSize: (event, value) => {
                         this.setState({
                             arabicFontSize: value
+                        })
+                    },
+                    changeOtherFontSize: (event, value) => {
+                        this.setState({
+                            otherFontSize: value
                         })
                     },
                     changeTranslation: (translationId) => {

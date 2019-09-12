@@ -12,6 +12,7 @@ class Verses extends React.Component {
         next_page: 1,
         max_limit: 20,
         fetching: true,
+        fetchingMore: false,
         translationId: this.context.state.translationId
     }
 
@@ -36,7 +37,8 @@ class Verses extends React.Component {
                             verses,
                             chapterId,
                             next_page,
-                            fetching: false
+                            fetching: false,
+                            fetchingMore: loadMore ? false : null
                         })
                     })
             }
@@ -54,37 +56,32 @@ class Verses extends React.Component {
                 const verses = [...res.data.verses];
                 // console.log(verses);
                 const next_page = res.data.meta.next_page;
-
-                this.setState({
-                    verses,
-                    chapterId,
-                    next_page,
-                    fetching: false,
-                    translationId
-                })
+                setTimeout(() => {
+                    this.setState({
+                        verses,
+                        chapterId,
+                        next_page,
+                        fetching: false,
+                        translationId
+                    })
+                }, 1000);
             })
-
     }
 
-    renderVerse() {
+    renderVerse(fetchingNewTranslation) {
         return this.state.verses.map(verse => {
+            // const fetchingNewTranslation = this.context.state.translationId !== this.state.translationId;
             return (
                 <div key={verse.id} className="verse">
                     <div className="verse-top-part">
                         <span className="verse_key">{verse.verse_key}</span>
                     </div>
-                    <AppContext.Consumer>
-                        {(context) => (
-                            <React.Fragment>
-                                {
-                                    <Typography style={{ fontSize: `${context.state.arabicFontSize}px` }} variant="h5" className="arabic_text">{verse.text_madani} <img width="20" src={bullet} ></img></Typography>
-                                }
-                            </React.Fragment>
-                        )}
-                    </AppContext.Consumer>
-                    <div className="translation">
+                    
+                    <Typography style={{ fontSize: `${this.context.state.arabicFontSize}px` }} variant="h5" className="arabic_text">{verse.text_madani} <img width="20" src={bullet} ></img></Typography>
+
+                    <div className={"translation " + (fetchingNewTranslation ? 'dimAnimation' : null)} >
                         <span className="translation_resource_name">{verse.translations[0].resource_name}</span>
-                        <p className="translation_text">{verse.translations[0].text}</p>
+                        <p style={{ fontSize: `${this.context.state.otherFontSize}px` }} className="translation_text">{verse.translations[0].text}</p>
                     </div>
                 </div>
             )
@@ -93,11 +90,11 @@ class Verses extends React.Component {
     }
 
     renderLoadMore(chapterId, translationId) {
-        if (!this.state.fetching) {
+        if (!this.state.fetchingMore) {
             return (
                 <Button onClick={() => {
                     this.fetchVerses(chapterId, translationId, true);
-                    this.setState({ fetching: true })
+                    this.setState({ fetchingMore: true })
                 }} variant="contained" color="primary" >
                     Load More
                 </Button>
@@ -115,8 +112,11 @@ class Verses extends React.Component {
         const { match } = this.props;
         console.log(this.context);
 
-        if (this.context.state.translationId !== this.state.translationId)
+        const fetchingNewTranslation = this.context.state.translationId !== this.state.translationId;
+
+        if (fetchingNewTranslation){
             this.fetchVersesOnTranslationUpdate(this.state.chapterId, this.context.state.translationId, false);
+        }
         else
             this.fetchVerses(match.params.chapterId, this.context.state.translationId, false);
 
@@ -139,14 +139,20 @@ class Verses extends React.Component {
                             </React.Fragment>
                         )}
                     </AppContext.Consumer>
-                    {this.renderVerse()}
+                    {this.renderVerse(fetchingNewTranslation)}
                     <div style={{ textAlign: 'center' }}>
-                        {this.renderLoadMore(match.params.chapterId, this.context.state.translationId)}
+                        {   
+                            (!this.state.fetching) ? 
+                            this.renderLoadMore(match.params.chapterId, this.context.state.translationId): null
+                        }
                     </div>
-                    {(this.state.fetching) ? (<div style = {{width: '100%', height: `${window.innerHeight}px`,
-                     position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-                        <LinearProgress style={{width: '100%'}} />
-                    </div>) : null}
+                    {console.log("fetchingNewTranslation" + fetchingNewTranslation)}
+                    {
+                        (this.state.fetching) ? (<div style = {{width: '100%', height: `${window.innerHeight}px`,
+                        position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: 0}}> 
+                            <LinearProgress style={{width: '100%'}} />
+                        </div>) : null
+                    }
                 </div>
             </React.Fragment>
         )

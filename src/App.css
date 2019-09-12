@@ -127,3 +127,15 @@ body{
 .drawerSettings .MuiExpansionPanelSummary-root.Mui-expanded{
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
+
+.dimAnimation{
+    animation-name: dim;
+    animation-duration: .4s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes dim {
+    0%   {opacity: 1;}
+    100% {opacity: .5;}
+  }
