@@ -93,13 +93,16 @@ const PrettoSlider = withStyles({
 
 class DrawerLayout extends React.Component {
   state = {
-    mobileOpen: false, chapterId: null, expanded: 'panel1',
+    mobileOpenChapter: false, mobileOpenSettings: false, chapterId: null, expanded: 'panel1',
     arabicFont: 10, openArabicFont: false
   }
 
+  handleDrawerToggleChapter = () => {
+    this.setState({ mobileOpenChapter: !this.state.mobileOpenChapter })
+  }
 
-  handleDrawerToggle = () => {
-    this.setState({ mobileOpen: !this.state.mobileOpen })
+  handleDrawerToggleSettings = () => {
+    this.setState({ mobileOpenSettings: !this.state.mobileOpenSettings })
   }
 
   handleChange = panel => (event, isExpanded) => {
@@ -134,7 +137,7 @@ class DrawerLayout extends React.Component {
   }
 
   render() {
-    const { mobileOpen } = this.state;
+    const { mobileOpenChapter, mobileOpenSettings } = this.state;
     const { classes } = this.props;
     console.log(this.props);
     const drawer = (
@@ -313,7 +316,7 @@ class DrawerLayout extends React.Component {
               color="inherit"
               aria-label="open drawer"
               edge="start"
-              onClick={this.handleDrawerToggle}
+              onClick={this.handleDrawerToggleChapter}
               className={classes.menuButton}
             >
               <MenuIcon />
@@ -331,7 +334,7 @@ class DrawerLayout extends React.Component {
               color="inherit"
               aria-label="open drawer"
               edge="start"
-              // onClick={handleDrawerToggle}
+              onClick={this.handleDrawerToggleSettings}
               className={classes.menuButton}
               style={{ marginRight: "-12px" }}
             >
@@ -344,8 +347,8 @@ class DrawerLayout extends React.Component {
           <Hidden smUp implementation="css">
             <Drawer
               variant="temporary"
-              open={mobileOpen}
-              onClose={this.handleDrawerToggle}
+              open={mobileOpenChapter}
+              onClose={this.handleDrawerToggleChapter}
               classes={{
                 paper: classes.drawerPaper,
               }}
@@ -373,8 +376,8 @@ class DrawerLayout extends React.Component {
               // container={container}
               variant="temporary"
               anchor="right"
-              open={mobileOpen}
-              // onClose={handleDrawerToggle}
+              open={mobileOpenSettings}
+              onClose={this.handleDrawerToggleSettings}
               classes={{
                 paper: classes.drawerPaper
               }}
