@@ -142,8 +142,9 @@ class DrawerLayout extends React.Component {
     console.log(this.props);
     const drawer = (
       <div>
-        <div className={classes.toolbar}>
-          <h2>AL - QURAN</h2>
+        <div className={classes.toolbar} style={{ backgroundColor: '#152722', display: 'flex', justifyContent: 'center',
+      alignItems: 'center' }}>
+          <h2 style = {{margin: 0}}>AL - QURAN</h2>
         </div>
         <Divider />
         <List className="chapterList">
@@ -180,11 +181,12 @@ class DrawerLayout extends React.Component {
 
     const drawerSettings = (
       <div className="drawerSettings">
-        <div className={classes.toolbar} style={{ backgroundColor: '#f8f8f8' }} >
-          <h2 style={{ color: '#ccc' }}>SETTINGS</h2>
+        <div className={classes.toolbar} style={{ backgroundColor: '#f8f8f8', display: 'flex', justifyContent: 'center',
+      alignItems: 'center' }} >
+          <h2 style={{ color: '#ccc', margin: 0 }}>SETTINGS</h2>
         </div>
         <Divider />
-        <div style={{ marginTop: '60px', padding: '16px 16px' }}>
+        <div style={{ padding: '16px 16px' }}>
           <ExpansionPanel expanded={this.state.expanded === 'panel1'} onChange={this.handleChange('panel1')}>
             <ExpansionPanelSummary
               expandIcon={<ExpandMoreIcon />}
