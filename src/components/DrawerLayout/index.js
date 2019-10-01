@@ -139,7 +139,9 @@ class DrawerLayout extends React.Component {
   render() {
     const { mobileOpenChapter, mobileOpenSettings } = this.state;
     const { classes } = this.props;
+    
     console.log(this.props);
+
     const drawer = (
       <div>
         <div className={classes.toolbar}>
