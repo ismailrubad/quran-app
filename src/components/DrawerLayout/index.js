@@ -4,7 +4,7 @@ import {
   AppBar, CssBaseline, Divider, Hidden, Drawer, IconButton,
   List, ListItem, ListItemSecondaryAction, ListItemText, Toolbar, Typography,
   ListItemAvatar, Avatar, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary,
-  MenuItem, FormLabel, FormControlLabel, Radio, RadioGroup, Select, FormControl
+  MenuItem, FormLabel, FormControlLabel, Radio, RadioGroup, Select, FormControl, Button
 
 }
   from '@material-ui/core';
@@ -139,14 +139,16 @@ class DrawerLayout extends React.Component {
   render() {
     const { mobileOpenChapter, mobileOpenSettings } = this.state;
     const { classes } = this.props;
-    
+
     console.log(this.props);
 
     const drawer = (
       <div>
-        <div className={classes.toolbar} style={{ backgroundColor: '#152722', display: 'flex', justifyContent: 'center',
-      alignItems: 'center' }}>
-          <h2 style = {{margin: 0}}>AL - QURAN</h2>
+        <div className={classes.toolbar} style={{
+          backgroundColor: '#152722', display: 'flex', justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <h2 style={{ margin: 0 }}>AL - QURAN</h2>
         </div>
         <Divider />
         <List className="chapterList">
@@ -172,8 +174,6 @@ class DrawerLayout extends React.Component {
                   <ListItemSecondaryAction><Typography variant="h6"> {chapter.name_arabic} </Typography> </ListItemSecondaryAction>
                 </ListItem>
               </Link>
-
-
             )
           })}
 
@@ -183,8 +183,10 @@ class DrawerLayout extends React.Component {
 
     const drawerSettings = (
       <div className="drawerSettings">
-        <div className={classes.toolbar} style={{ backgroundColor: '#f8f8f8', display: 'flex', justifyContent: 'center',
-      alignItems: 'center' }} >
+        <div className={classes.toolbar} style={{
+          backgroundColor: '#f8f8f8', display: 'flex', justifyContent: 'center',
+          alignItems: 'center'
+        }} >
           <h2 style={{ color: '#ccc', margin: 0 }}>SETTINGS</h2>
         </div>
         <Divider />
@@ -359,6 +361,7 @@ class DrawerLayout extends React.Component {
               ModalProps={{
                 keepMounted: true, // Better open performance on mobile.
               }}
+              onClick={this.handleDrawerToggleChapter}
             >
               {drawer}
             </Drawer>
@@ -431,6 +434,12 @@ class DrawerLayout extends React.Component {
               return <Verses {...props} {...currentChapter} />
             }
           } />
+
+          <Route exact path="/" render={() => {
+            return (<div className="absoluteCenter">              
+              <Link to={'/1'}><Button variant="contained" color="primary" className={classes.button}>Start Reading</Button> </Link>
+            </div>)
+          }} />
         </main>
       </div>
     );

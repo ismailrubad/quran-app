@@ -3,7 +3,6 @@ import axios from 'axios';
 import { AppContext } from './AppContextProvider';
 import { Typography, Button, CircularProgress, LinearProgress } from '@material-ui/core';
 import bullet from '../../src/assets/img/bullet.svg'
-import { bool } from 'prop-types';
 class Verses extends React.Component {
 
     state = {
@@ -24,23 +23,28 @@ class Verses extends React.Component {
             const next_page = (chapterId !== this.state.chapterId) ? 1 : this.state.next_page;
 
             if (next_page !== null) {
-                axios.get(`http://staging.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
-                    .then(res => {
-                        // console.log(res.data);
-                        const verses = loadMore ? [...this.state.verses, ...res.data.verses] : [...res.data.verses];
-                        // console.log(verses);
-                        const next_page = res.data.meta.next_page;
 
-                        // console.log("nextpage"+ next_page);
+                this.setState({ fetching: (!loadMore) ? true : false }, () => {
+                    axios.get(`http://staging.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+                        .then(res => {
+                            // console.log(res.data);
+                            const verses = loadMore ? [...this.state.verses, ...res.data.verses] : [...res.data.verses];
+                            // console.log(verses);
+                            const next_page = res.data.meta.next_page;
 
-                        this.setState({
-                            verses,
-                            chapterId,
-                            next_page,
-                            fetching: false,
-                            fetchingMore: loadMore ? false : null
+                            // console.log("nextpage"+ next_page);
+
+                            this.setState({
+                                verses,
+                                chapterId,
+                                next_page,
+                                fetching: false,
+                                fetchingMore: loadMore ? false : null
+                            })
                         })
-                    })
+                });
+
+
             }
         }
 
@@ -72,11 +76,11 @@ class Verses extends React.Component {
         return this.state.verses.map(verse => {
             // const fetchingNewTranslation = this.context.state.translationId !== this.state.translationId;
             return (
-                <div key={verse.id} className="verse">
+                <div key={verse.id} className={"verse " + (this.state.fetching ? 'dimAnimation' : null)}>
                     <div className="verse-top-part">
                         <span className="verse_key">{verse.verse_key}</span>
                     </div>
-                    
+
                     <Typography style={{ fontSize: `${this.context.state.arabicFontSize}px` }} variant="h5" className="arabic_text">{verse.text_madani} <img width="20" src={bullet} ></img></Typography>
 
                     <div className={"translation " + (fetchingNewTranslation ? 'dimAnimation' : null)} >
@@ -107,22 +111,23 @@ class Verses extends React.Component {
         }
     }
 
+    componentWillReceiveProps(nextProps) {
+        const { match } = nextProps;
+        this.fetchVerses(match.params.chapterId, this.context.state.translationId, false);
+    }
+
 
     render() {
         const { match } = this.props;
         console.log(this.context);
-
         const fetchingNewTranslation = this.context.state.translationId !== this.state.translationId;
 
-        if (fetchingNewTranslation){
+        if(fetchingNewTranslation)
             this.fetchVersesOnTranslationUpdate(this.state.chapterId, this.context.state.translationId, false);
-        }
-        else
-            this.fetchVerses(match.params.chapterId, this.context.state.translationId, false);
 
         return (
             <React.Fragment>
-                <div style = {{position: 'relative'}}>
+                <div style={{ position: 'relative' }}>
                     <AppContext.Consumer>
                         {(context) => (
                             <React.Fragment>
@@ -141,16 +146,18 @@ class Verses extends React.Component {
                     </AppContext.Consumer>
                     {this.renderVerse(fetchingNewTranslation)}
                     <div style={{ textAlign: 'center' }}>
-                        {   
-                            (!this.state.fetching) ? 
-                            this.renderLoadMore(match.params.chapterId, this.context.state.translationId): null
+                        {
+                            (!this.state.fetching) ?
+                                this.renderLoadMore(match.params.chapterId, this.context.state.translationId) : null
                         }
                     </div>
                     {console.log("fetchingNewTranslation" + fetchingNewTranslation)}
                     {
-                        (this.state.fetching) ? (<div style = {{width: '100%', height: `${window.innerHeight}px`,
-                        position: 'absolute', display: 'flex', justifyContent: 'center', alignItems: 'center', top: 0}}> 
-                            <LinearProgress style={{width: '100%'}} />
+                        (this.state.fetching) ? (<div style={{
+                            width: '100%', zIndex: 9999, left: 0,
+                            position: 'fixed', display: 'flex', justifyContent: 'center', alignItems: 'center', top: 0
+                        }}>
+                            <LinearProgress style={{ width: '100%' }} />
                         </div>) : null
                     }
                 </div>
