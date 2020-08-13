@@ -25,7 +25,7 @@ class Verses extends React.Component {
             if (next_page !== null) {
 
                 this.setState({ fetching: (!loadMore) ? true : false }, () => {
-                    axios.get(`http://staging.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+                    axios.get(`http://api.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
                         .then(res => {
                             // console.log(res.data);
                             const verses = loadMore ? [...this.state.verses, ...res.data.verses] : [...res.data.verses];
@@ -54,7 +54,7 @@ class Verses extends React.Component {
 
         const next_page = 1;
 
-        axios.get(`http://staging.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+        axios.get(`http://api.quran.com:3000/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
             .then(res => {
                 // console.log(res.data);
                 const verses = [...res.data.verses];
@@ -122,7 +122,7 @@ class Verses extends React.Component {
         console.log(this.context);
         const fetchingNewTranslation = this.context.state.translationId !== this.state.translationId;
 
-        if(fetchingNewTranslation)
+        if (fetchingNewTranslation)
             this.fetchVersesOnTranslationUpdate(this.state.chapterId, this.context.state.translationId, false);
 
         return (
