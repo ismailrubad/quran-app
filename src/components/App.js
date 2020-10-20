@@ -28,7 +28,7 @@ class App extends React.Component {
     }
 
     async componentDidMount() {
-        axios.get(`http://api.quran.com:3000/api/v3/chapters`)
+        axios.get(`http://api.quran.com/api/v3/chapters`)
             .then(res => {
                 this.setState({
                     chapters: res.data.chapters
