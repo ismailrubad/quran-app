@@ -27,6 +27,7 @@ class App extends React.Component {
         chapters: []
     }
 
+    // get chapters
     async componentDidMount() {
         axios({
             url: 'https://staging.quran.com/api/v3/chapters',
