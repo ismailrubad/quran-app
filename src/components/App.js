@@ -30,11 +30,11 @@ class App extends React.Component {
     // get chapters
     async componentDidMount() {
         axios({
-            url: 'https://staging.quran.com/api/v3/chapters',
+            url: 'http://api.quran.com/api/v3/chapters',
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': 'http://quran-ul-kareem.herokuapp.com'
             }
         })
             .then(res => {
