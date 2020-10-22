@@ -29,7 +29,7 @@ class App extends React.Component {
 
     async componentDidMount() {
         axios({
-            url: 'https://staging.quran.com:3000/api/v3/chapters',
+            url: 'https://staging.quran.com/api/v3/chapters',
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
