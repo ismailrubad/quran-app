@@ -28,7 +28,6 @@ class App extends React.Component {
     }
 
     async componentDidMount() {
-<<<<<<< HEAD
         axios({
             url: 'https://staging.quran.com:3000/api/v3/chapters',
             method: 'get',
@@ -36,17 +35,11 @@ class App extends React.Component {
                 'Content-Type': 'application/json',
                 'Access-Control-Allow-Origin': '*'
             }
-        }
-        )
-=======
-        axios.get(`http://api.quran.com/api/v3/chapters`)
->>>>>>> fdcd01f638bb1c0b1b7dc0d2e503a37c5919698d
+        })
             .then(res => {
                 this.setState({
                     chapters: res.data.chapters
                 })
-            }).catch(err => {
-                console.log(err);
             })
     }
 
