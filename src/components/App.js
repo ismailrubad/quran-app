@@ -34,7 +34,7 @@ class App extends React.Component {
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': 'http://quran-ul-kareem.herokuapp.com'
+                'Access-Control-Allow-Origin': '*'
             }
         })
             .then(res => {
