@@ -6,29 +6,37 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import {AppProvider} from './AppContextProvider';
+import { AppProvider } from './AppContextProvider';
 import { StylesProvider } from '@material-ui/styles'
 
 const theme = createMuiTheme({
     palette: {
-      primary: {
-          main: '#1948bc',
-      },
-      secondary: green,
+        primary: {
+            main: '#1948bc',
+        },
+        secondary: green,
     },
     status: {
-      danger: 'orange',
+        danger: 'orange',
     },
 });
 
 class App extends React.Component {
-    
+
     state = {
         chapters: []
     }
 
     async componentDidMount() {
-        axios.get(`http://staging.quran.com:3000/api/v3/chapters`)
+        axios({
+            url: 'https://staging.quran.com:3000/api/v3/chapters',
+            method: 'get',
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        }
+        )
             .then(res => {
                 this.setState({
                     chapters: res.data.chapters
@@ -36,15 +44,15 @@ class App extends React.Component {
             })
     }
 
-    render(){
+    render() {
 
-        return(
+        return (
             <AppProvider>
                 <ThemeProvider theme={theme}>
                     <StylesProvider injectFirst>
                         <div id="app-wrapper" >
                             <BrowserRouter>
-                                <DrawerLayout chapters = {this.state.chapters} />
+                                <DrawerLayout chapters={this.state.chapters} />
                             </BrowserRouter>
                         </div>
                     </StylesProvider>
