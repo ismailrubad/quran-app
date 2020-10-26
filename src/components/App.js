@@ -29,26 +29,26 @@ class App extends React.Component {
 
     // get chapters
     async componentDidMount() {
-        // axios.get(`http://api.quran.com/api/v3/chapters`)
-        //     .then(res => {
-        //         this.setState({
-        //             chapters: res.data.chapters
-        //         })
-        //     })
-
-        axios({
-            url: 'http://cors-anywhere.herokuapp.com/http://api.quran.com/api/v3/chapters',
-            method: 'get',
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
+        axios.get(`http://api.quran.com/api/v3/chapters`)
             .then(res => {
                 this.setState({
                     chapters: res.data.chapters
                 })
             })
+
+        // axios({
+        //     url: 'http://api.quran.com/api/v3/chapters',
+        //     method: 'get',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Access-Control-Allow-Origin': '*'
+        //     }
+        // })
+        //     .then(res => {
+        //         this.setState({
+        //             chapters: res.data.chapters
+        //         })
+        //     })
     }
 
     render() {
