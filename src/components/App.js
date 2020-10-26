@@ -37,7 +37,7 @@ class App extends React.Component {
         //     })
 
         axios({
-            url: 'http://api.quran.com/api/v3/chapters',
+            url: 'http://cors-anywhere.herokuapp.com/http://api.quran.com/api/v3/chapters',
             method: 'get',
             headers: {
                 'Content-Type': 'application/json',
