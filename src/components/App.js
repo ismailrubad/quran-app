@@ -36,6 +36,16 @@ class App extends React.Component {
                 })
             })
 
+        let response = await fetch("https://api.quran.com/api/v3/chapters");
+
+        if (response.ok) { // if HTTP-status is 200-299
+            // get the response body (the method explained below)
+            let json = await response.json();
+            console.log(json)
+        } else {
+            alert("HTTP-Error: " + response.status);
+        }
+
         // axios({
         //     url: 'http://api.quran.com/api/v3/chapters',
         //     method: 'get',
