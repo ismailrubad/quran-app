@@ -15,7 +15,7 @@ class Verses extends React.Component {
         translationId: this.context.state.translationId
     }
 
-    fetchVerses(chapterId, translationId, loadMore) {
+    async fetchVerses(chapterId, translationId, loadMore) {
         console.log("fetching");
 
         if (chapterId !== this.state.chapterId || loadMore) {
