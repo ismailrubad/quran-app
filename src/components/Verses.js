@@ -81,26 +81,56 @@ class Verses extends React.Component {
 
     }
 
-    fetchVersesOnTranslationUpdate(chapterId, translationId) {
+    fetchVersesOnTranslationUpdate = (chapterId, translationId) => {
 
         const next_page = 1;
 
-        axios.get(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
-            .then(res => {
-                // console.log(res.data);
-                const verses = [...res.data.verses];
-                // console.log(verses);
-                const next_page = res.data.meta.next_page;
-                setTimeout(() => {
-                    this.setState({
-                        verses,
-                        chapterId,
-                        next_page,
-                        fetching: false,
-                        translationId
-                    })
-                }, 1000);
+        fetch(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+            .then((response) => {
+                if (response.status !== 200) {
+                    console.log('Looks like there was a problem. Status Code: ' +
+                        response.status);
+                    return;
+                }
+
+                // Examine the text in the response
+                response.json().then((data) => {
+                    console.log(data);
+                    // console.log(res.data);
+                    const verses = [...data.verses];
+                    // console.log(verses);
+                    const next_page = data.meta.next_page;
+                    setTimeout(() => {
+                        this.setState({
+                            verses,
+                            chapterId,
+                            next_page,
+                            fetching: false,
+                            translationId
+                        })
+                    }, 1000);
+                });
             })
+            .catch(function (err) {
+                console.log('Fetch Error :-S', err);
+            });
+
+        // axios.get(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+        //     .then(res => {
+        //         // console.log(res.data);
+        //         const verses = [...res.data.verses];
+        //         // console.log(verses);
+        //         const next_page = res.data.meta.next_page;
+        //         setTimeout(() => {
+        //             this.setState({
+        //                 verses,
+        //                 chapterId,
+        //                 next_page,
+        //                 fetching: false,
+        //                 translationId
+        //             })
+        //         }, 1000);
+        //     })
     }
 
     renderVerse(fetchingNewTranslation) {
