@@ -85,7 +85,7 @@ class Verses extends React.Component {
 
         const next_page = 1;
 
-        fetch(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+        fetch(`https://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
             .then((response) => {
                 if (response.status !== 200) {
                     console.log('Looks like there was a problem. Status Code: ' +
