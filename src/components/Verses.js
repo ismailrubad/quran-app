@@ -34,7 +34,7 @@ class Verses extends React.Component {
                             }
 
                             // Examine the text in the response
-                            response.json().then(function (data) {
+                            response.json().then((data) => {
                                 console.log(data);
                                 // console.log(res.data);
                                 const verses = loadMore ? [...this.state.verses, ...data.verses] : [...data.verses];
@@ -51,8 +51,7 @@ class Verses extends React.Component {
                                     fetchingMore: loadMore ? false : null
                                 })
                             });
-                        }
-                        )
+                        })
                         .catch(function (err) {
                             console.log('Fetch Error :-S', err);
                         });
