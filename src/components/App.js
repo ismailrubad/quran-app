@@ -29,12 +29,12 @@ class App extends React.Component {
 
     // get chapters
     async componentDidMount() {
-        axios.get(`http://api.quran.com/api/v3/chapters`)
-            .then(res => {
-                this.setState({
-                    chapters: res.data.chapters
-                })
-            })
+        // axios.get(`http://api.quran.com/api/v3/chapters`)
+        //     .then(res => {
+        //         this.setState({
+        //             chapters: res.data.chapters
+        //         })
+        //     })
 
         let response = await fetch("https://api.quran.com/api/v3/chapters");
 
@@ -42,23 +42,13 @@ class App extends React.Component {
             // get the response body (the method explained below)
             let json = await response.json();
             console.log(json)
+            this.setState({
+                chapters: json.chapters
+            })
         } else {
             alert("HTTP-Error: " + response.status);
         }
 
-        // axios({
-        //     url: 'http://api.quran.com/api/v3/chapters',
-        //     method: 'get',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Access-Control-Allow-Origin': '*'
-        //     }
-        // })
-        //     .then(res => {
-        //         this.setState({
-        //             chapters: res.data.chapters
-        //         })
-        //     })
     }
 
     render() {
