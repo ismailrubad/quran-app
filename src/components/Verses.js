@@ -25,7 +25,7 @@ class Verses extends React.Component {
             if (next_page !== null) {
 
                 this.setState({ fetching: (!loadMore) ? true : false }, () => {
-                    fetch(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+                    fetch(`https://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
                         .then(
                             function (response) {
                                 if (response.status !== 200) {
