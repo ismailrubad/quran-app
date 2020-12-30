@@ -15,7 +15,7 @@ class Verses extends React.Component {
         translationId: this.context.state.translationId
     }
 
-    async fetchVerses(chapterId, translationId, loadMore) {
+    fetchVerses(chapterId, translationId, loadMore) {
         console.log("fetching");
 
         if (chapterId !== this.state.chapterId || loadMore) {
@@ -25,30 +25,38 @@ class Verses extends React.Component {
             if (next_page !== null) {
 
                 this.setState({ fetching: (!loadMore) ? true : false }, () => {
-                    let response = await fetch(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`);
+                    fetch(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
+                        .then(
+                            function (response) {
+                                if (response.status !== 200) {
+                                    console.log('Looks like there was a problem. Status Code: ' +
+                                        response.status);
+                                    return;
+                                }
 
-                    if (response.ok) { // if HTTP-status is 200-299
-                        // get the response body (the method explained below)
-                        let json = await response.json();
-                        console.log(json)
-                        // console.log(res.data);
-                        const verses = loadMore ? [...this.state.verses, ...json.verses] : [...json.verses];
-                        // console.log(verses);
-                        const next_page = json.meta.next_page;
+                                // Examine the text in the response
+                                response.json().then(function (data) {
+                                    console.log(data);
+                                    // console.log(res.data);
+                                    const verses = loadMore ? [...this.state.verses, ...data.verses] : [...data.verses];
+                                    // console.log(verses);
+                                    const next_page = data.meta.next_page;
 
-                        // console.log("nextpage"+ next_page);
+                                    // console.log("nextpage"+ next_page);
 
-                        this.setState({
-                            verses,
-                            chapterId,
-                            next_page,
-                            fetching: false,
-                            fetchingMore: loadMore ? false : null
-                        })
-
-                    } else {
-                        alert("HTTP-Error: " + response.status);
-                    }
+                                    this.setState({
+                                        verses,
+                                        chapterId,
+                                        next_page,
+                                        fetching: false,
+                                        fetchingMore: loadMore ? false : null
+                                    })
+                                });
+                            }
+                        )
+                        .catch(function (err) {
+                            console.log('Fetch Error :-S', err);
+                        });
 
                     // axios.get(`http://api.quran.com/api/v3/chapters/${chapterId}/verses?recitation=1&translations=${translationId}&language=en&page=${next_page}&limit=${this.state.max_limit}&text_type=words`)
                     //     .then(res => {
